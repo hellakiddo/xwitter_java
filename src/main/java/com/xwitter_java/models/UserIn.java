@@ -1,9 +1,9 @@
 package com.xwitter_java.models;
 
+import com.xwitter_java.constraints.UniqueEmail;
+import com.xwitter_java.constraints.UniqueUsername;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class UserIn {
@@ -14,13 +14,20 @@ public class UserIn {
 
     @NotEmpty(message = "Имя пользователя не может быть пустым")
     @Column(unique = true)
+    @UniqueUsername
     private String username;
 
     @NotEmpty(message = "Email не может быть пустым")
     @Email(message = "Некорректный формат email")
     @Column(unique = true)
+    @Pattern(
+            regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+            message = "Это не email"
+    )
+    @UniqueEmail
     private String email;
 
+    @NotEmpty(message = "Пароль необходим")
     @Size(min = 6, message = "Пароль должен содержать не менее 6 символов")
     private String password;
 
